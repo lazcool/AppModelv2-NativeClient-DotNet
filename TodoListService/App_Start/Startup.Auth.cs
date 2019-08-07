@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.Owin.Security;
 using Owin;
 using System.IdentityModel.Tokens;
+using System.Text;
 using Microsoft.Owin.Security.Jwt;
 using Microsoft.Owin.Security.OAuth;
 
@@ -37,6 +38,28 @@ namespace TodoListService
                     },
                     new OpenIdConnectSecurityTokenProvider("https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration")
                 ),
+            });
+//            app.UseJwtBearerAuthentication(new JwtBearerAuthenticationOptions
+//            {
+//                //difference between? AllowedAudiences & TokenValidationParameters = new TokenValidationParameters { ValidAudience = "https://quickstarts/api",
+//AllowedAudiences = new[] {""}
+//            });
+
+            app.UseJwtBearerAuthentication(new JwtBearerAuthenticationOptions
+            {
+                AuthenticationMode           = AuthenticationMode.Active,
+                TokenValidationParameters    = new TokenValidationParameters
+                {
+                    // check in commitments. plug in these values...
+                    //var apiKeySecret = CloudConfigurationManager.GetSetting("ApiTokenSecret");
+                    //var apiIssuer = CloudConfigurationManager.GetSetting("ApiIssuer");
+                    //var apiAudiences = CloudConfigurationManager.GetSetting("ApiAudiences").Split(' ');
+                    
+                    AuthenticationType = "Bearer",
+                    ValidIssuer = "apiIssuer",
+                    ValidAudience = "apiAudiences",
+                    IssuerSigningKey   = new InMemorySymmetricSecurityKey(Encoding.UTF8.GetBytes("apiKeySecret")),
+                }
             });
         }
     }
