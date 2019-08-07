@@ -56,9 +56,9 @@ namespace TodoListService
                     //var apiAudiences = CloudConfigurationManager.GetSetting("ApiAudiences").Split(' ');
                     
                     AuthenticationType = "Bearer",
-                    ValidIssuer = "apiIssuer",
-                    ValidAudience = "apiAudiences",
-                    IssuerSigningKey   = new InMemorySymmetricSecurityKey(Encoding.UTF8.GetBytes("apiKeySecret")),
+                    ValidIssuer = "http://example.com",
+                    ValidAudience = "doubleauthpoc",
+                    IssuerSigningKey   = new InMemorySymmetricSecurityKey(Encoding.UTF8.GetBytes("secretsauceonitsownisnotlongenough")),
                 }
             });
         }
