@@ -63,6 +63,20 @@ namespace TodoListService.Controllers
         // GET api/todolist
         public IEnumerable<TodoItem> Get()
         {
+            // how do roles work in aad? need to replicate what you end up with in jwt
+            
+            // get roles from jwt (fow when authenticated using jwt)
+            // existing API's/clients use a data claim to pass roles
+            // (rather than the using standard 'roles' claim, which is supported out-of-the-box)
+            var dataClaim = userClaims.FindFirst("data").Value;
+            var roles = dataClaim.Split(' ');
+            
+            //var primaryClaimsIdentity = ClaimsPrincipal.Current.Identity as ClaimsIdentity;
+            //primaryClaimsIdentity.AddClaims(roles.Select(r => new Claim(ClaimTypes.Role, r)));
+            //todo: claims at this point will be too late for eg. das-authentication filters/attributes
+            // need to plug into pipeline somewhere, using e.g. filter (see https://stackoverflow.com/questions/35765204/how-can-i-get-user-and-claim-information-using-action-filters/35826744)
+            userClaims.AddClaims(roles.Select(r => new Claim(ClaimTypes.Role, r)));
+            
             CheckAccessTokenScope("access_as_user");
             
             // You can use the ClaimsPrincipal to access information about the
